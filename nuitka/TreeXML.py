@@ -8,6 +8,7 @@ XML tree to ASCII or output it.
 """
 
 from nuitka.__past__ import BytesIO, StringIO
+import lxml.etree
 
 
 def _indent(elem, level=0, more_sibs=False):
@@ -104,7 +105,7 @@ def fromFile(file_handle, use_lxml=False):
     if use_lxml:
         from lxml import etree  # pylint: disable=I0021,import-error
 
-        return etree.parse(file_handle).getroot()
+        return etree.parse(file_handle, parser=lxml.etree.XMLParser(resolve_entities=False)).getroot()
     else:
         return xml_module.parse(file_handle).getroot()
 
