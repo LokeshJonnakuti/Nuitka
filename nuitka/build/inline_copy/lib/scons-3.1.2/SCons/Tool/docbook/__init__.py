@@ -42,6 +42,7 @@ import SCons.Defaults
 import SCons.Script
 import SCons.Tool
 import SCons.Util
+import lxml.etree
 
 
 __debug_tool_location = False
@@ -238,8 +239,8 @@ def __xml_scan(node, env, path, arg):
 
             from lxml import etree
 
-            xsl_tree = etree.parse(xsl_file)
-            doc = etree.parse(str(node))
+            xsl_tree = etree.parse(xsl_file, parser=lxml.etree.XMLParser(resolve_entities=False))
+            doc = etree.parse(str(node), parser=lxml.etree.XMLParser(resolve_entities=False))
             result = doc.xslt(xsl_tree)
 
             depfiles = [x.strip() for x in str(result).splitlines() if x.strip() != "" and not x.startswith("<?xml ")]
@@ -341,9 +342,9 @@ def __build_lxml(target, source, env):
                                       read_network=False,
                                       write_network=False)
     xsl_style = env.subst('$DOCBOOK_XSL')
-    xsl_tree = etree.parse(xsl_style)
+    xsl_tree = etree.parse(xsl_style, parser=lxml.etree.XMLParser(resolve_entities=False))
     transform = etree.XSLT(xsl_tree, access_control=xslt_ac)
-    doc = etree.parse(str(source[0]))
+    doc = etree.parse(str(source[0]), parser=lxml.etree.XMLParser(resolve_entities=False))
     # Support for additional parameters
     parampass = {}
     if parampass:
@@ -376,7 +377,7 @@ def __xinclude_lxml(target, source, env):
     """
     from lxml import etree
 
-    doc = etree.parse(str(source[0]))
+    doc = etree.parse(str(source[0]), parser=lxml.etree.XMLParser(resolve_entities=False))
     doc.xinclude()
     try:
         doc.write(str(target[0]), xml_declaration=True,
@@ -496,7 +497,7 @@ def DocbookEpub(env, target, source=None, *args, **kw):
         elif has_lxml:
             from lxml import etree
 
-            opf = etree.parse(content_file)
+            opf = etree.parse(content_file, parser=lxml.etree.XMLParser(resolve_entities=False))
             # All the opf:item elements are resources
             for item in opf.xpath('//opf:item',
                     namespaces= { 'opf': 'http://www.idpf.org/2007/opf' }):
