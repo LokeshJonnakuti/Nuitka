@@ -87,6 +87,7 @@ import os
 import re
 import shlex
 import sys
+from security import safe_command
 
 try:
     import readline
@@ -344,7 +345,7 @@ version                 Prints SCons version information.
             # http://mail.python.org/pipermail/python-dev/2008-August/081979.html "+
             # Doing the right thing with an argument list currently
             # requires different shell= values on Windows and Linux.
-            p = subprocess.Popen(argv, shell=(sys.platform=='win32'))
+            p = safe_command.run(subprocess.Popen, argv, shell=(sys.platform=='win32'))
         except EnvironmentError as e:
             sys.stderr.write('scons: %s: %s\n' % (argv[0], e.strerror))
         else:

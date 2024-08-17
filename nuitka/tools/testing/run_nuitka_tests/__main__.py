@@ -30,6 +30,7 @@ from nuitka.utils.FileOperations import (
 )
 from nuitka.utils.Timing import TimerReport
 from nuitka.utils.Utils import hasOnefileSupportedOS, hasStandaloneSupportedOS
+from security import safe_command
 
 
 def parseOptions():
@@ -686,9 +687,9 @@ def main():
         my_print("Run '%s' in '%s'." % (" ".join(parts), os.getcwd()))
 
         if hide_output:
-            result = subprocess.call(parts, stdout=getNullOutput())
+            result = safe_command.run(subprocess.call, parts, stdout=getNullOutput())
         else:
-            result = subprocess.call(parts)
+            result = safe_command.run(subprocess.call, parts)
 
         if result != 0:
             sys.exit(result)

@@ -46,6 +46,7 @@ from nuitka.utils.FileOperations import (
 from nuitka.utils.Utils import isWin32OrPosixWindows
 
 from .YamlFormatter import formatYaml
+from security import safe_command
 
 # black no longer supports Python 2 syntax, and sometimes removes import
 # parts of syntax used in tests
@@ -522,8 +523,7 @@ def _cleanupClangFormat(filename, trace):
     clang_format_path = _getClangFormatPath(trace=trace)
 
     if clang_format_path:
-        subprocess.call(
-            [
+        safe_command.run(subprocess.call, [
                 clang_format_path,
                 "-i",
                 "-style={BasedOnStyle: llvm, IndentWidth: 4, ColumnLimit: 120}",

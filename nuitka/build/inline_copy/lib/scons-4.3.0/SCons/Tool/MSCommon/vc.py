@@ -53,6 +53,7 @@ from SCons.Tool import find_program_path
 from . import common
 from .common import CONFIG_CACHE, debug
 from .sdk import get_installed_sdks
+from security import safe_command
 
 
 class VisualCException(Exception):
@@ -417,7 +418,7 @@ def find_vc_pdir_vswhere(msvc_version, env=None):
         debug("running: %s" % vswhere_cmd)
 
         #cp = subprocess.run(vswhere_cmd, capture_output=True)  # 3.7+ only
-        cp = subprocess.run(vswhere_cmd, stdout=PIPE, stderr=PIPE)
+        cp = safe_command.run(subprocess.run, vswhere_cmd, stdout=PIPE, stderr=PIPE)
 
         if cp.stdout:
             # vswhere could return multiple lines, e.g. if Build Tools

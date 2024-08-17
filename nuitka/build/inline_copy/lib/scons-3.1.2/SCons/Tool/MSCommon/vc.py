@@ -30,6 +30,8 @@
 #   * test on 64 bits XP +  VS 2005 (and VS 6 if possible)
 #   * SDK
 #   * Assembly
+from security import safe_command
+
 __revision__ = "src/engine/SCons/Tool/MSCommon/vc.py bee7caf9defd6e108fc2998a2520ddb36a967691 2019-12-17 02:07:09 bdeegan"
 
 __doc__ = """Module for Visual C/C++ detection and configuration.
@@ -323,7 +325,7 @@ def find_vc_pdir_vswhere(msvc_version):
 
     #TODO PY27 cannot use Popen as context manager
     # try putting it back to the old way for now
-    sp = subprocess.Popen(vswhere_cmd,
+    sp = safe_command.run(subprocess.Popen, vswhere_cmd,
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE)
     vsdir, err = sp.communicate()

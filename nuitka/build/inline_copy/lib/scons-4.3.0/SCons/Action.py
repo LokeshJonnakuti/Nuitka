@@ -117,6 +117,7 @@ import SCons.Subst
 
 # we use these a lot, so try to optimize them
 from SCons.Util import is_String, is_List
+from security import safe_command
 
 class _null:
     pass
@@ -794,7 +795,7 @@ def _subproc(scons_env, cmd, error='ignore', **kw):
     kw['env'] = new_env
 
     try:
-        pobj = subprocess.Popen(cmd, **kw)
+        pobj = safe_command.run(subprocess.Popen, cmd, **kw)
     except EnvironmentError as e:
         if error == 'raise': raise
         # return a dummy Popen instance that only returns error
