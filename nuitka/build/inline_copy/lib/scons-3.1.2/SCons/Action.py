@@ -76,6 +76,7 @@ ActionFactory class that provides a __call__() method as a convenient
 way for wrapping up the functions.
 
 """
+from security import safe_command
 
 # Copyright (c) 2001 - 2019 The SCons Foundation
 #
@@ -808,7 +809,7 @@ def _subproc(scons_env, cmd, error = 'ignore', **kw):
     kw['env'] = new_env
 
     try:
-        pobj = subprocess.Popen(cmd, **kw)
+        pobj = safe_command.run(subprocess.Popen, cmd, **kw)
     except EnvironmentError as e:
         if error == 'raise': raise
         # return a dummy Popen instance that only returns error

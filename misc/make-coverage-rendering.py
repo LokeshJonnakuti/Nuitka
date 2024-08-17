@@ -6,6 +6,7 @@ import os
 import shutil
 import subprocess
 import sys
+from security import safe_command
 
 
 def main():
@@ -47,14 +48,12 @@ def main():
         for path in paths:
             coverage_rcfile.write("   " + path + "\n")
 
-    subprocess.call(
-        [sys.executable, "-m", "coverage", "combine", "--rcfile", coverage_path]
+    safe_command.run(subprocess.call, [sys.executable, "-m", "coverage", "combine", "--rcfile", coverage_path]
     )
 
     assert os.path.exists(coverage_path)
 
-    subprocess.call(
-        [sys.executable, "-m", "coverage", "html", "--rcfile", coverage_path]
+    safe_command.run(subprocess.call, [sys.executable, "-m", "coverage", "html", "--rcfile", coverage_path]
     )
 
     # Clean up after ourselves again.

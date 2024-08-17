@@ -65,6 +65,7 @@ from nuitka.utils.Utils import (
 
 from .SconsCaching import checkCachingSuccess
 from .SconsUtils import flushSconsReports, getSconsReportValue
+from security import safe_command
 
 
 def getSconsDataPath():
@@ -377,7 +378,7 @@ def runScons(options, env_values, scons_filename):
 
                 source_dir = getExternalUsePath(source_dir)
             try:
-                result = subprocess.call(scons_command, shell=False, cwd=source_dir)
+                result = safe_command.run(subprocess.call, scons_command, shell=False, cwd=source_dir)
             except KeyboardInterrupt:
                 Tracing.scons_logger.sysexit("User interrupted scons build.")
 

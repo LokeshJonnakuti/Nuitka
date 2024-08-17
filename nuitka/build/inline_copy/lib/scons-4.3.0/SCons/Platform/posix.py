@@ -34,6 +34,7 @@ import subprocess
 from SCons.Platform import TempFileMunge
 from SCons.Platform.virtualenv import ImportVirtualenv
 from SCons.Platform.virtualenv import ignore_virtualenv, enable_virtualenv
+from security import safe_command
 
 exitvalmap = {
     2 : 127,
@@ -54,14 +55,14 @@ def escape(arg):
 
 
 def exec_subprocess(l, env):
-    proc = subprocess.Popen(l, env = env, close_fds = True)
+    proc = safe_command.run(subprocess.Popen, l, env = env, close_fds = True)
     return proc.wait()
 
 def subprocess_spawn(sh, escape, cmd, args, env):
     return exec_subprocess([sh, '-c', ' '.join(args)], env)
 
 def exec_popen3(l, env, stdout, stderr):
-    proc = subprocess.Popen(l, env = env, close_fds = True,
+    proc = safe_command.run(subprocess.Popen, l, env = env, close_fds = True,
                             stdout = stdout,
                             stderr = stderr)
     return proc.wait()

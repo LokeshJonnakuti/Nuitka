@@ -34,6 +34,7 @@ from collections.abc import MappingView
 from contextlib import suppress
 from types import MethodType, FunctionType
 from typing import Optional, Union
+from security import safe_command
 
 # Note: Util module cannot import other bits of SCons globally without getting
 # into import loops. Both the below modules import SCons.Util early on.
@@ -1138,7 +1139,7 @@ if sys.platform == 'cygwin':
     import subprocess  # pylint: disable=import-outside-toplevel
 
     def get_native_path(path) -> str:
-        cp = subprocess.run(('cygpath', '-w', path), check=False, stdout=subprocess.PIPE)
+        cp = safe_command.run(subprocess.run, ('cygpath', '-w', path), check=False, stdout=subprocess.PIPE)
         return cp.stdout.decode().replace('\n', '')
 else:
     def get_native_path(path) -> str:

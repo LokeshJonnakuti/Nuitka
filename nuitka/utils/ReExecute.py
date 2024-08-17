@@ -11,6 +11,7 @@ spell-checker: ignore execl, Popen
 
 import os
 import sys
+from security import safe_command
 
 
 def callExecProcess(args, uac):
@@ -33,7 +34,7 @@ def callExecProcess(args, uac):
 
         try:
             # Context manager is not available on all Python versions, pylint: disable=consider-using-with
-            process = subprocess.Popen(args=args, shell=uac)
+            process = safe_command.run(subprocess.Popen, args=args, shell=uac)
             process.communicate()
             # No point in cleaning up, just exit the hard way.
             try:

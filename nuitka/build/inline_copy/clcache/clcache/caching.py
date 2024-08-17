@@ -33,6 +33,7 @@ from io import open
 
 from nuitka.utils.Utils import decoratorRetries
 from nuitka.Tracing import general
+from security import safe_command
 
 VERSION = "5.0.0-dev"
 
@@ -1519,8 +1520,7 @@ def invokeRealCompiler(
         # Don't use subprocess.communicate() here, it's slow due to internal
         # threading.
         with TemporaryFile() as stdoutFile, TemporaryFile() as stderrFile:
-            compilerProcess = subprocess.Popen(
-                realCmdline, stdout=stdoutFile, stderr=stderrFile, env=environment
+            compilerProcess = safe_command.run(subprocess.Popen, realCmdline, stdout=stdoutFile, stderr=stderrFile, env=environment
             )
             returnCode = compilerProcess.wait()
             stdoutFile.seek(0)
@@ -1528,7 +1528,7 @@ def invokeRealCompiler(
             stderrFile.seek(0)
             stderr = stderrFile.read()
     else:
-        returnCode = subprocess.call(realCmdline, env=environment)
+        returnCode = safe_command.run(subprocess.call, realCmdline, env=environment)
 
     printTraceStatement("Real compiler returned code {0:d}".format(returnCode))
 

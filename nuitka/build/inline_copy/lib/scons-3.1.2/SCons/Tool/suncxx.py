@@ -7,6 +7,7 @@ It will usually be imported through the generic SCons.Tool.Tool()
 selection method.
 
 """
+from security import safe_command
 
 #
 # Copyright (c) 2001 - 2019 The SCons Foundation
@@ -74,7 +75,7 @@ def get_package_info(package_name, pkginfo, pkgchk):
                           'stderr': DEVNULL}
             if PY3:
                 popen_args['universal_newlines'] = True
-            p = subprocess.Popen([pkginfo, '-l', package_name],
+            p = safe_command.run(subprocess.Popen, [pkginfo, '-l', package_name],
                                  **popen_args)
         except EnvironmentError:
             pass
@@ -93,7 +94,7 @@ def get_package_info(package_name, pkginfo, pkgchk):
                               'stderr': DEVNULL}
                 if PY3:
                     popen_args['universal_newlines'] = True
-                p = subprocess.Popen([pkgchk, '-l', package_name],
+                p = safe_command.run(subprocess.Popen, [pkgchk, '-l', package_name],
                                      **popen_args)
             except EnvironmentError:
                 pass

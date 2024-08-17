@@ -7,6 +7,7 @@ It will usually be imported through the generic SCons.Tool.Tool()
 selection method.
 
 """
+from security import safe_command
 
 #
 # __COPYRIGHT__
@@ -66,7 +67,7 @@ def get_package_info(package_name, pkginfo, pkgchk):
                 pathname = os.path.dirname(sadm_match.group(1))
 
         try:
-            p = subprocess.Popen([pkginfo, '-l', package_name],
+            p = safe_command.run(subprocess.Popen, [pkginfo, '-l', package_name],
                                  universal_newlines=True,
                                  stdout=subprocess.PIPE,
                                  stderr=DEVNULL)
@@ -81,7 +82,7 @@ def get_package_info(package_name, pkginfo, pkgchk):
 
         if pathname is None:
             try:
-                p = subprocess.Popen([pkgchk, '-l', package_name],
+                p = safe_command.run(subprocess.Popen, [pkgchk, '-l', package_name],
                                      universal_newlines=True,
                                      stdout=subprocess.PIPE,
                                      stderr=DEVNULL)

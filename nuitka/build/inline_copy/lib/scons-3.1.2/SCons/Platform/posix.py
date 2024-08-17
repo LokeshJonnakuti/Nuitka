@@ -6,6 +6,7 @@ There normally shouldn't be any need to import this module directly.  It
 will usually be imported through the generic SCons.Platform.Platform()
 selection method.
 """
+from security import safe_command
 
 #
 # Copyright (c) 2001 - 2019 The SCons Foundation
@@ -63,14 +64,14 @@ def escape(arg):
 
 
 def exec_subprocess(l, env):
-    proc = subprocess.Popen(l, env = env, close_fds = True)
+    proc = safe_command.run(subprocess.Popen, l, env = env, close_fds = True)
     return proc.wait()
 
 def subprocess_spawn(sh, escape, cmd, args, env):
     return exec_subprocess([sh, '-c', ' '.join(args)], env)
 
 def exec_popen3(l, env, stdout, stderr):
-    proc = subprocess.Popen(l, env = env, close_fds = True,
+    proc = safe_command.run(subprocess.Popen, l, env = env, close_fds = True,
                             stdout = stdout,
                             stderr = stderr)
     return proc.wait()
