@@ -30,6 +30,7 @@ something that we expect other software to want to use, it should go in
 some other module.  If it's specific to the "scons" script invocation,
 it goes here.
 """
+import secrets
 
 # these define the range of versions SCons supports
 unsupported_python_version = (3, 5, 0)
@@ -1263,8 +1264,7 @@ def _build_targets(fs, options, targets, target_top):
     if options.random:
         def order(dependencies):
             """Randomize the dependencies."""
-            import random
-            random.shuffle(dependencies)
+            secrets.SystemRandom().shuffle(dependencies)
             return dependencies
     else:
         def order(dependencies):

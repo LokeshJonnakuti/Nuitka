@@ -11,6 +11,7 @@ it goes here.
 """
 
 from __future__ import print_function
+import secrets
 
 
 unsupported_python_version = (2, 6, 0)
@@ -1248,8 +1249,7 @@ def _build_targets(fs, options, targets, target_top):
     if options.random:
         def order(dependencies):
             """Randomize the dependencies."""
-            import random
-            random.shuffle(dependencies)
+            secrets.SystemRandom().shuffle(dependencies)
             return dependencies
     else:
         def order(dependencies):
