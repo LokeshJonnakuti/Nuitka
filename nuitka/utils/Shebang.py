@@ -54,7 +54,7 @@ def getShebangFromFile(filename):
     """
 
     with open(filename, "rb") as f:
-        source_code = f.readline()
+        source_code = f.readline(5_000_000)
 
         if str is not bytes:
             try:

@@ -105,7 +105,7 @@ def isHomebrewPython():
 
     if os.path.exists(candidate):
         with open(candidate, "rb") as site_file:
-            line = site_file.readline()
+            line = site_file.readline(5_000_000)
 
         if b"Homebrew" in line:
             return True

@@ -759,18 +759,18 @@ class _GenerateV6DSP(_DSPGenerator):
         except IOError:
             return # doesn't exist yet, so can't add anything to configs.
 
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         # skip until marker
         while line:
             if "# End Project" in line:
                 break
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
 
         # read to get configs
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         datas = line
         while line and line != '\n':
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
             datas = datas + line
 
         # OK, we've found our little pickled cache of data.
@@ -786,10 +786,10 @@ class _GenerateV6DSP(_DSPGenerator):
 
         # keep reading to get sources
         data = None
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         datas = line
         while line and line != '\n':
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
             datas = datas + line
         dspfile.close()
 
@@ -1077,18 +1077,18 @@ class _GenerateV7DSP(_DSPGenerator, _GenerateV7User):
         except IOError:
             return # doesn't exist yet, so can't add anything to configs.
 
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         # skip until marker
         while line:
             if '<!-- SCons Data:' in line:
                 break
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
 
         # read to get configs
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         datas = line
         while line and line != '\n':
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
             datas = datas + line
 
         # OK, we've found our little pickled cache of data.
@@ -1104,10 +1104,10 @@ class _GenerateV7DSP(_DSPGenerator, _GenerateV7User):
 
         # keep reading to get sources
         data = None
-        line = dspfile.readline()
+        line = dspfile.readline(5_000_000)
         datas = line
         while line and line != '\n':
-            line = dspfile.readline()
+            line = dspfile.readline(5_000_000)
             datas = datas + line
         dspfile.close()
 
@@ -1575,16 +1575,16 @@ class _GenerateV7DSW(_DSWGenerator):
         except IOError:
             return # doesn't exist yet, so can't add anything to configs.
 
-        line = dswfile.readline()
+        line = dswfile.readline(5_000_000)
         while line:
             if line[:9] == "EndGlobal":
                 break
-            line = dswfile.readline()
+            line = dswfile.readline(5_000_000)
 
-        line = dswfile.readline()
+        line = dswfile.readline(5_000_000)
         datas = line
         while line:
-            line = dswfile.readline()
+            line = dswfile.readline(5_000_000)
             datas = datas + line
         dswfile.close()
 
