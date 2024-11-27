@@ -10,7 +10,6 @@
 """
 import re
 import math
-import random
 import warnings
 
 from itertools import groupby, chain
@@ -20,6 +19,7 @@ from jinja2.utils import Markup, escape, pformat, urlize, soft_unicode, \
 from jinja2.runtime import Undefined
 from jinja2.exceptions import FilterArgumentError
 from jinja2._compat import imap, string_types, text_type, iteritems, PY2
+import secrets
 
 
 _word_re = re.compile(r'\w+', re.UNICODE)
@@ -451,7 +451,7 @@ def do_last(environment, seq):
 def do_random(context, seq):
     """Return a random item from the sequence."""
     try:
-        return random.choice(seq)
+        return secrets.choice(seq)
     except IndexError:
         return context.environment.undefined('No random item, sequence was empty.')
 

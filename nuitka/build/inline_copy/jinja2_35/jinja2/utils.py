@@ -15,6 +15,7 @@ from collections import deque
 from threading import Lock
 from jinja2._compat import text_type, string_types, implements_iterator, \
      url_quote, abc
+import secrets
 
 
 _word_split_re = re.compile(r'(\s+)')
@@ -238,7 +239,6 @@ def urlize(text, trim_url_limit=None, rel=None, target=None):
 def generate_lorem_ipsum(n=5, html=True, min=20, max=100):
     """Generate some lorem ipsum for the template."""
     from jinja2.constants import LOREM_IPSUM_WORDS
-    from random import choice, randrange
     words = LOREM_IPSUM_WORDS.split()
     result = []
 
@@ -250,9 +250,9 @@ def generate_lorem_ipsum(n=5, html=True, min=20, max=100):
         p = []
 
         # each paragraph contains out of 20 to 100 words.
-        for idx, _ in enumerate(range(randrange(min, max))):
+        for idx, _ in enumerate(range(secrets.SystemRandom().randrange(min, max))):
             while True:
-                word = choice(words)
+                word = secrets.choice(words)
                 if word != last:
                     last = word
                     break
@@ -260,12 +260,12 @@ def generate_lorem_ipsum(n=5, html=True, min=20, max=100):
                 word = word.capitalize()
                 next_capitalized = False
             # add commas
-            if idx - randrange(3, 8) > last_comma:
+            if idx - secrets.SystemRandom().randrange(3, 8) > last_comma:
                 last_comma = idx
                 last_fullstop += 2
                 word += ','
             # add end of sentences
-            if idx - randrange(10, 20) > last_fullstop:
+            if idx - secrets.SystemRandom().randrange(10, 20) > last_fullstop:
                 last_comma = last_fullstop = idx
                 word += '.'
                 next_capitalized = True
